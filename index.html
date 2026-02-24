@@ -39,6 +39,47 @@
     <div id="output" class="result"></div>
 </div>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>External Exam Eligibility Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>External Eligibility Calculator</h1>
+
+    <div class="form-group">
+        <label>MID-1 (Out of 30)</label>
+        <input type="number" id="mid1" max="30">
+    </div>
+
+    <div class="form-group">
+        <label>MID-2 (Out of 30)</label>
+        <input type="number" id="mid2" max="30">
+    </div>
+
+    <div class="form-group">
+        <label>AAT-1 (Out of 10)</label>
+        <input type="number" id="aat1" max="10">
+    </div>
+
+    <div class="form-group">
+        <label>AAT-2 (Out of 10)</label>
+        <input type="number" id="aat2" max="10">
+    </div>
+
+    <div class="form-group">
+        <label>Attendance %</label>
+        <input type="number" id="attendance" max="100">
+    </div>
+
+    <button onclick="calculate()">CHECK YOUR ELIGIBILITY</button>
+
+    <div id="output" class="result"></div>
+</div>
+
 <script>
 function calculate() {
 
@@ -48,26 +89,64 @@ let aat1 = parseFloat(document.getElementById("aat1").value) || 0;
 let aat2 = parseFloat(document.getElementById("aat2").value) || 0;
 let attendance = parseFloat(document.getElementById("attendance").value) || 0;
 
-let total = mid1 + mid2 + aat1 + aat2;
-
-if(attendance >= 90){
-    total += 5;
-}
-
-let finalMarks = (total / 80) * 40;
-
 let output = document.getElementById("output");
 
-if(finalMarks >= 20){
-    output.innerHTML = "Final Internal Marks: " + finalMarks.toFixed(2) + "/40 <br> PASS ✅ ELIGIBLE FOR EXTERNAL";
+// Validation
+if (mid1 > 30 || mid2 > 30 || aat1 > 10 || aat2 > 10 || attendance > 100) {
+    output.innerHTML = "❌ Please enter marks within valid limits.";
+    output.className = "result fail";
+    return;
+}
+
+if (mid1 < 0 || mid2 < 0 || aat1 < 0 || aat2 < 0 || attendance < 0) {
+    output.innerHTML = "❌ Marks and attendance cannot be negative.";
+    output.className = "result fail";
+    return;
+}
+
+// Calculate total
+let total = mid1 + mid2 + aat1 + aat2;
+
+// Attendance bonus
+let bonus = (attendance >= 90) ? 5 : 0;
+
+// Ensure max is 80
+let totalWithBonus = Math.min(total + bonus, 80);
+
+// Convert to 40
+let finalMarks = (totalWithBonus / 80) * 40;
+
+// Percentage
+let percentage = (finalMarks / 40) * 100;
+
+// Result
+if (finalMarks >= 20) {
+    output.innerHTML =
+        "Internal Total: " + totalWithBonus + "/80<br>" +
+        "Final Internal Marks: " + finalMarks.toFixed(2) + "/40<br>" +
+        "Percentage: " + percentage.toFixed(1) + "%<br>" +
+        "PASS ✅ ELIGIBLE FOR EXTERNAL";
+
     output.className = "result pass";
-}else{
-    output.innerHTML = "Final Internal Marks: " + finalMarks.toFixed(2) + "/40 <br> FAIL ❌ NOT ELIGIBLE FOR EXTERNAL";
+}
+else {
+    output.innerHTML =
+        "Internal Total: " + totalWithBonus + "/80<br>" +
+        "Final Internal Marks: " + finalMarks.toFixed(2) + "/40<br>" +
+        "Percentage: " + percentage.toFixed(1) + "%<br>" +
+        "FAIL ❌ NOT ELIGIBLE FOR EXTERNAL";
+
     output.className = "result fail";
 }
+
 }
 </script>
 
 </body>
 </html>
+
+
+</body>
+</html>
+
 
