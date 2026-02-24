@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>External Exam Eligibility Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>External Eligibility Calculator</h1>
+
+    <div class="form-group">
+        <label>MID-1 (Out of 30)</label>
+        <input type="number" id="mid1" max="30">
+    </div>
+
+    <div class="form-group">
+        <label>MID-2 (Out of 30)</label>
+        <input type="number" id="mid2" max="30">
+    </div>
+
+    <div class="form-group">
+        <label>AAT-1 (Out of 10)</label>
+        <input type="number" id="aat1" max="10">
+    </div>
+
+    <div class="form-group">
+        <label>AAT-2 (Out of 10)</label>
+        <input type="number" id="aat2" max="10">
+    </div>
+
+    <div class="form-group">
+        <label>Attendance %</label>
+        <input type="number" id="attendance" max="100">
+    </div>
+
+    <button onclick="calculate()">CHECK YOUR ELIGIBILITY</button>
+
+    <div id="output" class="result"></div>
+</div>
+
+<script>
+function calculate() {
+
+let mid1 = parseFloat(document.getElementById("mid1").value) || 0;
+let mid2 = parseFloat(document.getElementById("mid2").value) || 0;
+let aat1 = parseFloat(document.getElementById("aat1").value) || 0;
+let aat2 = parseFloat(document.getElementById("aat2").value) || 0;
+let attendance = parseFloat(document.getElementById("attendance").value) || 0;
+
+let total = mid1 + mid2 + aat1 + aat2;
+
+if(attendance >= 90){
+    total += 5;
+}
+
+let finalMarks = (total / 80) * 40;
+
+let output = document.getElementById("output");
+
+if(finalMarks >= 20){
+    output.innerHTML = "Final Internal Marks: " + finalMarks.toFixed(2) + "/40 <br> PASS ✅ ELIGIBLE FOR EXTERNAL";
+    output.className = "result pass";
+}else{
+    output.innerHTML = "Final Internal Marks: " + finalMarks.toFixed(2) + "/40 <br> FAIL ❌ NOT ELIGIBLE FOR EXTERNAL";
+    output.className = "result fail";
+}
+}
+</script>
+
+</body>
+</html>
