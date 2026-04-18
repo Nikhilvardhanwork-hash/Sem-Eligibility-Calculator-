@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>External Exam Eligibility Calculator</title>
+<title>Bec External Exam Eligibility Calculator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -20,7 +20,7 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;   /* ✅ FIXED */
     padding: 20px;
 }
 
@@ -37,239 +37,221 @@ body {
 /* Heading */
 h1 {
     text-align: center;
-    margin-bottom: 25px;
-    font-size: 22px;
+    margin-bottom: 20px;
+    font-size: 24px;   /* slightly bigger */
     color: #1e3c72;
     font-weight: 600;
-    letter-spacing: 0.5px;
 }
 
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 16px;   /* smaller than h1 */
+    color: #555;       /* softer color */
+    font-weight: normal;
+}
 /* Label */
 label {
     display: block;
     margin-bottom: 6px;
     font-weight: 600;
     font-size: 14px;
-    color: #333;
 }
 
 /* Input */
 input {
     width: 100%;
     padding: 10px;
-    font-size: 15px;
     border-radius: 6px;
-    border: 1px solid #bfc5cc;
-    outline: none;
-    transition: border 0.2s;
-}
-
-input:focus {
-    border-color: #1e3c72;
+    border: 1px solid #ccc;
 }
 
 /* Button */
 button {
     width: 100%;
     padding: 12px;
-    font-size: 15px;
-    font-weight: bold;
-    border: none;
     border-radius: 6px;
     background: #1e3c72;
     color: white;
+    border: none;
     cursor: pointer;
-    transition: 0.3s;
+    margin-top: 10px;
 }
 
-button:hover {
-    background: #16325c;
-}
-
-/* Result Box */
+/* Result */
 .result {
     margin-top: 20px;
     padding: 15px;
     border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.7;
     text-align: center;
-    overflow-wrap: break-word;
 }
 
-/* Pass */
 .pass {
     background: #e6f4ea;
     color: #1e7e34;
 }
 
-/* Fail */
 .fail {
     background: #fdecea;
     color: #c82333;
 }
 
-/* Mobile */
-@media (max-width: 480px) {
-    .container {
-        padding: 25px 18px;
-    }
-
-    h1 {
-        font-size: 18px;
-    }
-
-    .result {
-        font-size: 13px;
-    }
+/* Summary Box */
+#summaryBox {
+    display: none;
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
 }
 
+#midBox, #aatBox {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    background: #e9ecef;
+    text-align: center;
+}
+
+/* Developer */
 .developer-credit {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 13px;
-    color: #555;
+    color: #777;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="container">
+
 <h1>External Eligibility Calculator</h1>
 
-<div class="form-group">
-<label>MID-1 (Out of 30)</label>
-<input type="number" id="mid1" min="0" max="30">
-</div>
+<label>MID-1</label>
+<input type="number" id="mid1">
 
-<div class="form-group">
-<label>MID-2 (Out of 30)</label>
-<input type="number" id="mid2" min="0" max="30">
-</div>
+<label>AAT-1</label>
+<input type="number" id="aat1">
 
-<div class="form-group">
-<label>AAT-1 (Out of 10)</label>
-<input type="number" id="aat1" min="0" max="10">
-</div>
+<label>MID-2</label>
+<input type="number" id="mid2">
 
-<div class="form-group">
-<label>AAT-2 (Out of 10)</label>
-<input type="number" id="aat2" min="0" max="10">
-</div>
+<label>AAT-2</label>
+<input type="number" id="aat2">
 
-<div class="form-group">
 <label>Attendance %</label>
-<input type="number" id="attendance" min="0" max="100">
-  
-  <div style="text-align:center;margin-top:15px;font-size:12px;color:#555;">
+<input type="number" id="attendance">
+
+<div style="text-align:center;margin-top:10px;font-size:12px;">
 Academic Internal Evaluation System
 </div>
 
 <button onclick="calculate()">CHECK ELIGIBILITY</button>
 
+<!-- RESULT -->
 <div id="output" class="result"></div>
+
+<!-- SUMMARY -->
+<div id="summaryBox">
+    <div id="midBox">
+        <b>MID Total</b><br>
+        <span id="midTotal"></span>/60
+    </div>
+
+    <div id="aatBox">
+        <b>AAT Total</b><br>
+        <span id="aatTotal"></span>/20
+    </div>
+</div>
+
+<!-- DEVELOPER -->
 <div class="developer-credit">
-    <i>Developed by k.Nikhil Vardhan</i><br>
-    <i>Department of Data Science-II</i>
+    <i>Developed by k.Nikhil Vardhan Dept of Data Science-II</i>
+</div>
+
 </div>
 
 <script>
 
 function calculate() {
 
-let mid1 = document.getElementById("mid1").value;
-let mid2 = document.getElementById("mid2").value;
-let aat1 = document.getElementById("aat1").value;
-let aat2 = document.getElementById("aat2").value;
-let attendance = document.getElementById("attendance").value;
+let mid1 = parseFloat(document.getElementById("mid1").value) || 0;
+let mid2 = parseFloat(document.getElementById("mid2").value) || 0;
+let aat1 = parseFloat(document.getElementById("aat1").value) || 0;
+let aat2 = parseFloat(document.getElementById("aat2").value) || 0;
+let attendance = parseFloat(document.getElementById("attendance").value) || 0;
 
 let output = document.getElementById("output");
 
-// Check empty fields
-if(mid1=="" || mid2=="" || aat1=="" || aat2=="" || attendance=="") {
-    output.innerHTML = "Please fill all fields before checking eligibility.";
-    output.className = "result fail";
-    return;
-}
-
-// Convert to numbers
-mid1 = parseFloat(mid1);
-mid2 = parseFloat(mid2);
-aat1 = parseFloat(aat1);
-aat2 = parseFloat(aat2);
-attendance = parseFloat(attendance);
-
-
-// ✅ ATTENDANCE MUST BE 75% OR ABOVE
+// Attendance rule
 if(attendance < 75) {
-
     output.className = "result fail";
-
-    output.innerHTML =
-    "<b>Attendance Requirement Not Met</b><br>" +
-    "Minimum 75% attendance is required.<br>" +
-    "<b>STATUS: NOT ELIGIBLE FOR EXTERNAL EXAMINATION</b>";
-
+    output.innerHTML = "Minimum 75% attendance required.";
     return;
 }
 
+// Totals
+let midTotal = mid1 + mid2;
+let aatTotal = aat1 + aat2;
 
-// Range validation
-if(mid1>30 || mid2>30 || aat1>10 || aat2>10 || attendance>100 || 
-   mid1<0 || mid2<0 || aat1<0 || aat2<0 || attendance<0) {
+// Show summary
+document.getElementById("summaryBox").style.display = "flex";
+document.getElementById("midTotal").innerText = midTotal;
+document.getElementById("aatTotal").innerText = aatTotal;
 
-    output.innerHTML = "Invalid input values. Please enter correct marks.";
-    output.className = "result fail";
-    return;
+// Highlight
+let midBox = document.getElementById("midBox");
+let aatBox = document.getElementById("aatBox");
+
+midBox.style.background = "#e9ecef";
+aatBox.style.background = "#e9ecef";
+
+if (midTotal > aatTotal) {
+    midBox.style.background = "#e6f4ea";
+    aatBox.style.background = "#fdecea";
+} else if (aatTotal > midTotal) {
+    aatBox.style.background = "#e6f4ea";
+    midBox.style.background = "#fdecea";
 }
 
-
-// Calculation
-let total = mid1 + mid2 + aat1 + aat2;
-
-let bonus = 0;
-
-// Updated attendance logic
-if (attendance >= 80) {
-    bonus = 4;   // covers 80 and above
-}
-else if (attendance >= 70) {
-    bonus = 3;   // covers 70–79
-}
+// Final calc
+let total = midTotal + aatTotal;
+let bonus = attendance >= 80 ? 4 : 3;
 
 let totalWithBonus = Math.min(total + bonus, 80);
-
 let finalMarks = (totalWithBonus / 80) * 40;
 
-let percentage = (finalMarks / 40) * 100;
-
-
-// PASS
+// Result
 if(finalMarks >= 20) {
 
     output.className = "result pass";
 
     output.innerHTML =
-    "<b>Internal Total:</b> " + totalWithBonus + "/80<br>" +
-    "<b>Final Internal Marks:</b> " + finalMarks.toFixed(2) + "/40<br>" +
-    "<b>Percentage:</b> " + percentage.toFixed(1) + "%<br>" +
-    "<hr>" +
-    "<b style='font-size:16px;'>STATUS: ELIGIBLE FOR EXTERNAL EXAMINATION</b>";
+    "<div style='font-size:14px;'><b>Internal Total:</b> <b>" + totalWithBonus + "/80</b></div>" +
+
+    "<div style='font-size:18px; margin:8px 0;'><b>Final Marks:</b> <b>" + finalMarks.toFixed(2) + "/40</b></div>" +
+
+    "<hr style='margin:10px 0'>" +
+
+    "<div style='font-size:22px; font-weight:bold; color:#1e7e34;'>STATUS: ELIGIBLE FOR SEM</div>";
 
 }
-
-// FAIL
 else {
 
     output.className = "result fail";
 
     output.innerHTML =
-    "<b>Internal Total:</b> " + totalWithBonus + "/80<br>" +
-    "<b>Final Internal Marks:</b> " + finalMarks.toFixed(2) + "/40<br>" +
-    "<b>Percentage:</b> " + percentage.toFixed(1) + "%<br>" +
-    "<hr>" +
-    "<b style='font-size:16px;'>STATUS: NOT ELIGIBLE FOR EXTERNAL EXAMINATION</b>";
+    "<div style='font-size:14px;'>Internal Total: <b>" + totalWithBonus + "/80</b></div>" +
+
+    "<div style='font-size:18px; margin:8px 0;'>Final Marks: <b>" + finalMarks.toFixed(2) + "/40</b></div>" +
+
+    "<hr style='margin:10px 0'>" +
+
+    "<div style='font-size:22px; font-weight:bold; color:#c82333;'>STATUS: NOT ELIGIBLE FOR SEM</div>";
 
 }
 
