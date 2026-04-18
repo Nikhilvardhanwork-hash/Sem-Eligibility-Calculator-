@@ -228,7 +228,15 @@ if(mid1>30 || mid2>30 || aat1>10 || aat2>10 || attendance>100 ||
 // Calculation
 let total = mid1 + mid2 + aat1 + aat2;
 
-let bonus = (attendance >= 90) ? 5 : 0;
+let bonus = 0;
+
+// Updated attendance logic
+if (attendance >= 80) {
+    bonus = 4;   // covers 80 and above
+}
+else if (attendance >= 70) {
+    bonus = 3;   // covers 70–79
+}
 
 let totalWithBonus = Math.min(total + bonus, 80);
 
